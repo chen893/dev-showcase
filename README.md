@@ -1,29 +1,181 @@
-# Create T3 App
+# 开发者作品展示网站
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+## 目录
 
-## What's next? How do I make an app with this?
+- [项目概述](#项目概述)
+- [技术栈](#技术栈)
+- [功能模块](#功能模块)
+- [数据模型](#数据模型)
+- [页面结构](#页面结构)
+- [开发指南](#开发指南)
+- [UI/UX 设计规范](#uiux-设计规范)
+- [开发计划](#开发计划)
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
+## 项目概述
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
+这是一个展示开发者个人作品的网站平台，用户可以浏览项目时间线、查看项目详情，管理员可以通过简单认证进行内容管理。
 
-- [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [Drizzle](https://orm.drizzle.team)
-- [Tailwind CSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
+**核心特点：**
 
-## Learn More
+- 响应式时间线展示个人项目
+- 项目详情页面展示深度内容
+- 简洁的管理员认证与内容管理
+- 突出展示项目的 GitHub 仓库和在线预览链接
 
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
+## 技术栈
 
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
+### 前端
 
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
+- **框架**：Next.js 15（App Router）
+- **UI库**：React 18.3.x
+- **类型系统**：TypeScript
+- **样式方案**：Tailwind CSS 3.4.x + Shadcn UI
+- **数据获取**：tanstack/react-query
 
-## How do I deploy this?
+### 后端
 
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+- **API框架**：tRPC 11.x
+- **数据库ORM**：Prisma
+- **数据验证**：zod
+- **序列化**：superjson
+
+### 开发工具
+
+- **包管理器**：pnpm
+- **代码质量**：ESLint + Prettier
+- **类型检查**：TypeScript
+
+## 功能模块
+
+### 1. 项目时间线展示
+
+- 垂直响应式时间线布局
+- 项目卡片展示（标题、描述、缩略图、技术标签）
+- 突出显示 GitHub 链接和在线预览链接
+- 筛选和排序功能（按技术、时间等）
+
+### 2. 管理员认证
+
+- 基于密钥的简单认证系统
+- 认证后显示编辑、删除和新增按钮
+- 权限持久化存储（Cookies/LocalStorage）
+
+### 3. 项目管理
+
+- 项目创建、编辑和删除
+- 通过弹窗方式完成创建和编辑操作，无需页面跳转
+- 媒体资源上传
+- 表单验证（确保填写必要字段如 GitHub 链接）
+
+### 4. 项目详情展示
+
+- 多媒体内容展示
+- 技术栈详解
+- 醒目的 GitHub 和预览链接
+- 相关项目推荐
+
+## 数据模型
+
+### Project 模型
+
+```prisma
+model Project {
+  id          String   @id @default(cuid())
+  title       String
+  slug        String   @unique
+  description String
+  content     String?  @db.Text
+  imageUrl    String?
+  liveUrl     String?  // 项目在线预览链接
+  repoUrl     String   // GitHub仓库链接（必填）
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  publishedAt DateTime?
+  featured    Boolean  @default(false)
+}
+```
+
+## 页面结构
+
+### 用户端页面
+
+| 页面     | 路由               | 主要功能                 |
+| -------- | ------------------ | ------------------------ |
+| 首页     | `/`                | 项目时间线展示、筛选功能 |
+| 项目详情 | `/projects/[slug]` | 项目详细信息、多媒体内容 |
+| 关于页面 | `/about`           | 网站介绍、开发者简介     |
+
+### 管理员页面
+
+| 页面          | 路由                       | 主要功能     |
+| ------------- | -------------------------- | ------------ |
+| 管理员验证    | `/admin/verify`            | 密钥验证     |
+| 项目创建/编辑 | 通过弹窗实现（无单独路由） | 内容管理操作 |
+
+## 开发指南
+
+### 组件结构
+
+推荐的组件结构：
+
+- `TimelineContainer`：数据获取与状态管理
+- `TimelineFilter`：过滤与排序控制
+- `ProjectCard`：项目卡片组件
+- `ProjectDetail`：项目详情组件
+- `ProjectModal`：项目创建和编辑弹窗组件
+
+### 性能优化策略
+
+1. 使用 React Server Components 减少客户端 JavaScript
+2. 实现虚拟列表或分页加载大量项目
+3. 利用 Next.js 的图像优化功能
+4. 实现合理的数据缓存策略
+
+## UI/UX 设计规范
+
+### 色彩方案
+
+- **主色调**：深蓝/深紫（专业感）
+- **强调色**：青色/绿色（技术感）
+- **背景**：暗色主题为主，亮色主题可选
+
+### 排版
+
+- Geist 字体系统
+- 代码片段使用等宽字体
+- 信息密度适中，充分留白
+
+### 交互设计
+
+- 平滑过渡动画
+- 卡片悬停微动效
+- 滚动触发动画
+- 即时筛选反馈
+- 创建/编辑弹窗的平滑出现与消失动画
+
+### 导航设计
+
+- 固定顶部导航栏
+- 移动端汉堡菜单
+- 详情页面包屑导航
+- 返回顶部按钮
+
+## 开发计划
+
+### 阶段一：基础设施与数据层
+
+- 项目初始化与技术栈配置
+- 数据库模型设计与实现
+- 核心 tRPC 路由开发
+
+### 阶段二：前端基础实现
+
+- 页面布局与导航组件
+- 时间线与项目卡片组件
+- 基础管理功能实现
+
+### 阶段三：交互优化
+
+- 筛选与排序功能
+- 动画与交互效果
+- 响应式设计优化
