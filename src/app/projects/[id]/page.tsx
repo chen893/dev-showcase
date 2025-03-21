@@ -2,8 +2,12 @@ import { Suspense } from "react";
 import { ProjectClient } from "./project-client";
 
 // 服务端入口组件
-export default function ProjectPage({ params }: { params: { id: string } }) {
-  const id = params.id;
+export default async function ProjectPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const id = (await params).id;
 
   return (
     <Suspense
