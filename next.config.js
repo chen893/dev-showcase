@@ -5,6 +5,14 @@
 import "./src/env.js";
 
 /** @type {import("next").NextConfig} */
-const config = {};
+const config = {
+  images: {
+    remotePatterns: [
+      {
+        hostname: "dev-showcase-1302245671.cos.ap-guangzhou.myqcloud.com",
+      },
+    ],
+  },
+};
 
 export default config;

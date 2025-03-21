@@ -12,7 +12,7 @@ export const adminRouter = createTRPCRouter({
       if (!env.ADMIN_KEY || input.adminKey !== env.ADMIN_KEY) {
         throw new TRPCError({
           code: "UNAUTHORIZED",
-          message: `管理员密钥无效: ${env.ADMIN_KEY} !== ${input.adminKey}`,
+          message: `管理员密钥无效`,
         });
       }
 

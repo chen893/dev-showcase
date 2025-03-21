@@ -18,6 +18,10 @@ export const env = createEnv({
       .enum(["development", "test", "production"])
       .default("development"),
     ADMIN_KEY: z.string(),
+    COS_SECRET_ID: z.string(),
+    COS_SECRET_KEY: z.string(),
+    COS_BUCKET: z.string(),
+    COS_REGION: z.string().default("ap-guangzhou"),
   },
 
   /**
@@ -40,6 +44,10 @@ export const env = createEnv({
     DATABASE_URL: process.env.DATABASE_URL,
     NODE_ENV: process.env.NODE_ENV,
     ADMIN_KEY: process.env.ADMIN_KEY,
+    COS_SECRET_ID: process.env.COS_SECRET_ID,
+    COS_SECRET_KEY: process.env.COS_SECRET_KEY,
+    COS_BUCKET: process.env.COS_BUCKET,
+    COS_REGION: process.env.COS_REGION,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially

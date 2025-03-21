@@ -27,7 +27,7 @@ const validateAdminKey = (key: string) => {
   if (!env.ADMIN_KEY || key !== env.ADMIN_KEY) {
     throw new TRPCError({
       code: "UNAUTHORIZED",
-      message: `管理员密钥无效: ${env.ADMIN_KEY} !== ${key}`,
+      message: `管理员密钥无效`,
     });
   }
 };
@@ -70,11 +70,10 @@ export const projectRouter = createTRPCRouter({
 
   // 获取单个项目
   getBySlug: publicProcedure
-    .input(z.object({ slug: z.string() }))
+    .input(z.object({ id: z.string() }))
     .query(async ({ ctx, input }) => {
-      console.log("input", input);
       const project = await ctx.db.project.findUnique({
-        where: { slug: input.slug },
+        where: { id: input.id },
       });
 
       if (!project) {

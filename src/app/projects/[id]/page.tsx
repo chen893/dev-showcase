@@ -2,10 +2,9 @@ import { Suspense } from "react";
 import { ProjectClient } from "./project-client";
 
 // 服务端入口组件
-export default function ProjectPage({ params }: { params: { slug: string } }) {
-  console.log("params", params);
-  // await;
-  const slug = params.slug;
+export default function ProjectPage({ params }: { params: { id: string } }) {
+  const id = params.id;
+
   return (
     <Suspense
       fallback={
@@ -16,7 +15,7 @@ export default function ProjectPage({ params }: { params: { slug: string } }) {
         </div>
       }
     >
-      {slug && <ProjectClient slug={slug} />}
+      {id && <ProjectClient id={id} />}
     </Suspense>
   );
 }

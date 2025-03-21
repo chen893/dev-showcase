@@ -14,7 +14,6 @@ export function saveAdminKey(key: string): void {
  * 从本地存储获取管理员密钥
  */
 export function getAdminKey(): string | null {
-  console.log("key", localStorage.getItem(ADMIN_KEY_STORAGE));
   if (typeof window !== "undefined") {
     return localStorage.getItem(ADMIN_KEY_STORAGE);
   }

@@ -24,8 +24,7 @@ import { useToast } from "@/hooks/use-toast";
 //   };
 // }
 
-export function ProjectClient({ slug }: { slug: string }) {
-  console.log("params", slug);
+export function ProjectClient({ id }: { id: string }) {
   const router = useRouter();
   const { toast } = useToast();
   const isAdmin = hasAdminKey();
@@ -39,7 +38,7 @@ export function ProjectClient({ slug }: { slug: string }) {
     error,
     refetch,
   } = api.project.getBySlug.useQuery({
-    slug,
+    id,
   });
 
   // 删除项目API

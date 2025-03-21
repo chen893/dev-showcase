@@ -16,6 +16,7 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import { type RouterOutputs } from "@/trpc/react";
 
+// import { ImageUploader } from "@/components/ImageUploader";
 // 定义项目类型
 type Project = RouterOutputs["project"]["getAll"]["items"][number];
 
@@ -183,7 +184,7 @@ export function ProjectsList() {
               <div className="p-4">
                 <h3 className="mb-2 text-xl font-semibold">
                   <Link
-                    href={`/projects/${project.slug}`}
+                    href={`/projects/${project.id}`}
                     className="hover:text-primary"
                   >
                     {project.title}

@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -27,6 +28,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
 import { type RouterOutputs } from "@/trpc/react";
+import { ImageUploader } from "@/components/ImageUploader";
 
 // 定义项目类型
 type Project = RouterOutputs["project"]["getAll"]["items"][number];
@@ -272,15 +274,40 @@ export function ProjectEditDialog({
                 name="imageUrl"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>项目图片URL</FormLabel>
+                    <FormLabel>项目图片</FormLabel>
                     <FormControl>
-                      <Input
-                        placeholder="https://example.com/image.jpg"
-                        {...field}
-                      />
+                      <div className="flex flex-col gap-4">
+                        {field.value && (
+                          <div className="rounded-md border p-2">
+                            <Image
+                              src={field.value}
+                              alt="项目预览图"
+                              width={100}
+                              height={100}
+                              className="h-40 w-full rounded object-cover"
+                            />
+                          </div>
+                        )}
+                        <ImageUploader
+                          onUploadSuccess={(imageUrl) => {
+                            field.onChange(imageUrl);
+                          }}
+                          buttonText={field.value ? "更换图片" : "上传项目图片"}
+                        />
+                        {field.value && (
+                          <Button
+                            type="button"
+                            variant="outline"
+                            onClick={() => field.onChange("")}
+                            className="w-fit"
+                          >
+                            移除图片
+                          </Button>
+                        )}
+                      </div>
                     </FormControl>
                     <FormDescription>
-                      项目的预览图片URL，将显示在项目卡片和详情页。
+                      项目的预览图片，将显示在项目卡片和详情页。
                     </FormDescription>
                     <FormMessage />
                   </FormItem>

@@ -3,14 +3,14 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { hasAdminKey } from "@/lib/admin";
+// import { hasAdminKey } from "@/lib/admin";
 import { cn } from "@/lib/utils";
 
 export function Navbar() {
   const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const isAdmin = hasAdminKey();
-
+  // const isAdmin = hasAdminKey();
+  const isAdmin = true;
   const navItems = [
     { name: "首页", href: "/" },
     { name: "关于", href: "/about" },
